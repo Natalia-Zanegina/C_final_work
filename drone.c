@@ -20,7 +20,7 @@
 #define FOOD_EXPIRE_SECONDS 10
 #define SEED_NUMBER 10
 
-extern double DELAY;
+extern double DELAY; // задержка при отрисовке
 
 
 int main(void)

@@ -22,23 +22,23 @@
 
 double DELAY = 0.1;
 
-struct control_buttons default_controls[CONTROLS] = {{KEY_DOWN, KEY_UP, KEY_LEFT, KEY_RIGHT}, {'S', 'W', 'A', 'D'}, {'s', 'w', 'a', 'd'}};
+struct control_buttons default_controls[CONTROLS] = {{KEY_DOWN, KEY_UP, KEY_LEFT, KEY_RIGHT}, {'S', 'W', 'A', 'D'}, {'s', 'w', 'a', 'd'}}; // инициализация структуры control_buttons вариантами кнопок для ручного управления дроном.
 
-void initTail(tail_t t[], size_t size)
+void initTail(tail_t t[], size_t size) // создаем будущую цепочку тележек - пока пустые ячейки (с одинаковыми нулевыми координатами)
 {
     tail_t init_t = {0, 0};
     for (size_t i = 0; i < size; i++)
         t[i] = init_t;
 }
 
-void initHead(drone_t* head, int x, int y)
+void initHead(drone_t* head, int x, int y) // создаем дрон (задаем координаты и направление движения по умолчанию)
 {
     head -> x = x;
     head -> y = y;
     head -> direction = RIGHT;
 }
 
-void initDrone(drone_t* head[], size_t size, int x, int y, int i)
+void initDrone(drone_t* head[], size_t size, int x, int y, int i) // выделяем необходимую память и прикрепляем к дрону цепочку тележек
 {
     head[i] = (drone_t*)malloc(sizeof(drone_t));
     tail_t* tail = (tail_t*) malloc(MAX_TAIL_SIZE * sizeof(tail_t));
@@ -49,7 +49,7 @@ void initDrone(drone_t* head[], size_t size, int x, int y, int i)
     head[i]->controls = default_controls;
 }
 
-void initPumpkins(struct pumpkin f[], size_t size)
+void initPumpkins(struct pumpkin f[], size_t size) // создаем будущие тыквы
 {
     struct pumpkin init = {0, 0, 0, 0, 0};
     int max_y = 0, max_x = 0;
@@ -58,7 +58,7 @@ void initPumpkins(struct pumpkin f[], size_t size)
         f[i] = init;
 }
 
-void go(drone_t* head)
+void go(drone_t* head) // перемещается дрон
 {
     char ch = '@';
     int max_x = 0, max_y = 0;
@@ -92,7 +92,7 @@ void go(drone_t* head)
     refresh();
 }
 
-void goTail(drone_t* head)
+void goTail(drone_t* head) // вслед за дроном перемещается цепочка тележек
 {
     char ch = '*';
     mvprintw(head -> tail[head -> tsize - 1].y,head -> tail[head -> tsize - 1].x, " ");
@@ -106,7 +106,7 @@ void goTail(drone_t* head)
     head -> tail[0].y = head -> y;
 }
 
-int checkDirection(drone_t* drone, int32_t key)
+int checkDirection(drone_t* drone, int32_t key) // проверка, не является ли направление противоположным текущему
 {
     for (int i = 0; i < CONTROLS; i++)
     {    
@@ -119,7 +119,7 @@ int checkDirection(drone_t* drone, int32_t key)
     return 1;
 }
 
-void changeDirection(drone_t* drone, const int32_t key)
+void changeDirection(drone_t* drone, const int32_t key) // изменить направление движения вручную (клавишей)
 {
     if (!checkDirection(drone, key))
         return;
@@ -137,7 +137,7 @@ void changeDirection(drone_t* drone, const int32_t key)
     }
 }
 
-void putPumpkinSeed(struct pumpkin* fp)
+void putPumpkinSeed(struct pumpkin* fp) // назначаем координаты, внешний вид и прочие характеристики тыкве и размещаем её на поле
 {
     int max_x = 0, max_y = 0;
     char spoint[2] = {0};
@@ -152,14 +152,14 @@ void putPumpkinSeed(struct pumpkin* fp)
     mvprintw(fp->y, fp->x, "%s", spoint);
 }
 
-void putPumpkin(struct pumpkin f[], size_t number_of_seeds)
+void putPumpkin(struct pumpkin f[], size_t number_of_seeds) // разместить все тыквы по порядку
 {
     for(size_t i = 0; i < number_of_seeds; i++)
         putPumpkinSeed(&f[i]);
 }
 
 
-void refreshPumpkin(struct pumpkin f[], int npumpkins)
+void refreshPumpkin(struct pumpkin f[], int npumpkins) // обновить тыквы
 {
     int max_x = 0, max_y = 0;
     getmaxyx(stdscr, max_y, max_x);
@@ -173,7 +173,7 @@ void refreshPumpkin(struct pumpkin f[], int npumpkins)
     }
 }
 
-_Bool haveCollect(struct drone_t* head, struct pumpkin f[])
+_Bool haveCollect(struct drone_t* head, struct pumpkin f[]) // собрал ли дрон данную тыкву
 {
     for (size_t i = 0; i < MAX_PUMPKINS_COUNT; i++)
     {
@@ -186,7 +186,7 @@ _Bool haveCollect(struct drone_t* head, struct pumpkin f[])
     return 0;
 }
 
-void addTrolley(struct drone_t *head)
+void addTrolley(struct drone_t *head) // добавить еще одну тележку
 {
     if (head == NULL || head -> tsize > MAX_TAIL_SIZE)
     {
@@ -196,14 +196,14 @@ void addTrolley(struct drone_t *head)
     head -> tsize++;
 }
 
-void printLevel(struct drone_t* head)
+void printLevel(struct drone_t* head) // печать количества собранных тыкв текущего дрона
 {
     int max_x = 0, max_y = 0;
     getmaxyx(stdscr, max_y, max_x);
     mvprintw(0, max_x - 20, "Count of trolleys: %zu", head -> tsize - 1);    
 }
 
-void printExit(struct drone_t* head)
+void printExit(struct drone_t* head) // печать итогового количества собранных текущим дроном тыкв
 {
     // int max_x = 0, max_y = 0;
     // getmaxyx(stdscr, max_y, max_x);
@@ -220,7 +220,7 @@ void printExit(struct drone_t* head)
     // printf("Total count of trolleys: %zu ", head -> tsize);
 }
 
-void printCrush()
+void printCrush() // печать сообщения об аварии
 {
     int max_x = 0, max_y = 0;
     getmaxyx(stdscr, max_y, max_x);
@@ -248,7 +248,7 @@ void autoChangeDirection(drone_t* drone, struct pumpkin pumpkin[], int pumpkinCo
     }
 }
 
-void update(struct drone_t* head, struct pumpkin f[], const int32_t key)
+void update(struct drone_t* head, struct pumpkin f[], const int32_t key) // обновление состояния: дрона, тележек и тыкв
 {
     int max_x = 0, max_y = 0;
     getmaxyx(stdscr, max_y, max_x);
@@ -264,7 +264,7 @@ void update(struct drone_t* head, struct pumpkin f[], const int32_t key)
     }    
 }
 
-void updateManual(struct drone_t* head, struct pumpkin f[], const int32_t key)
+void updateManual(struct drone_t* head, struct pumpkin f[], const int32_t key) // обновление состояния: дрона, тележек и тыкв (при ручном управлении)
 {
     int max_x = 0, max_y = 0;
     getmaxyx(stdscr, max_y, max_x);
@@ -280,7 +280,7 @@ void updateManual(struct drone_t* head, struct pumpkin f[], const int32_t key)
     }    
 }
 
-_Bool isCrush(drone_t* drone)
+_Bool isCrush(drone_t* drone) // проверка, не столкнулся ли дрон с тележками
 {
     for (size_t i = 1; i < drone->tsize; i++)
     {

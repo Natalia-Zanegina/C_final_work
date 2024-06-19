@@ -6,7 +6,7 @@ enum {
     RIGHT,
     DOWN,
     STOP_GAME = KEY_F(10)
-};
+}; // ключевые команды для управления дроном
 
 struct control_buttons
 {
@@ -14,6 +14,4 @@ struct control_buttons
     int up;
     int left;
     int right;
-};
-
-// struct control_buttons default_controls[CONTROLS] = {{KEY_DOWN, KEY_UP, KEY_LEFT, KEY_RIGHT}, {'S', 'W', 'A', 'D'}, {'s', 'w', 'a', 'd'}};
+}; // структура контрольных значений, для которых можно назначить определенные клавиши

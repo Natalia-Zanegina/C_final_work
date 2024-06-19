@@ -1,5 +1,3 @@
-// double DELAY = 0.1;
-
 void go(drone_t* head);
 void goTail(drone_t* head);
 int checkDirection(drone_t* drone, int32_t key);
